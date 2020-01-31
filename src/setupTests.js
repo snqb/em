@@ -5,6 +5,26 @@ import 'jest-localstorage-mock'
 configure({ adapter: new Adapter() })
 
 window.createTestApp = async (app) => {
+  document.getSelection = () => ({
+    type: 'None',
+  })
+
+  document.createRange = () => ({
+    setStart: () => {},
+    setEnd: () => {},
+    commonAncestorContainer: {
+      nodeName: 'BODY',
+      ownerDocument: document,
+    },
+    collapse: () => {},
+  })
+
+  window.getSelection = () => ({
+    focusOffset: 3,
+    removeAllRanges: () => {},
+    addRange: () => {},
+  })
+
   // eslint-disable-next-line no-undef
   jest.useFakeTimers()
   const wrapper = await mount(app, { attachTo: document.body })
@@ -15,5 +35,13 @@ window.createTestApp = async (app) => {
   // eslint-disable-next-line no-undef
   jest.runAllTimers()
   await wrapper.update()
+
   return wrapper
+}
+
+window.cleanupTestApp = () => {
+  // eslint-disable-next-line fp/no-delete
+  delete document.getSelection
+  // eslint-disable-next-line fp/no-delete
+  delete window.getSelection
 }
