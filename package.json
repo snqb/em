@@ -68,7 +68,7 @@
     "deploy": "npm version major && npm run build && firebase deploy",
     "lint": "eslint src",
     "pretest": "npm run lint",
-    "test": "react-scripts test --env=jsdom --silent",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "browserslist": {
