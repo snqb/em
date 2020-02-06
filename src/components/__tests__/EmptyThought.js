@@ -1,5 +1,5 @@
 import React from 'react'
-import { App } from '../App'
+import App from '../../App'
 
 // eslint-disable-next-line fp/no-let
 let wrapper = null
@@ -16,7 +16,7 @@ afterAll(() => {
 })
 
 it('create and edit empty thought', async () => {
-  const thoughts = wrapper.find('div.transformContain div ul')
+  const thoughts = wrapper.find('div.transformContain div ul.children')
   const thought = thoughts.find(
     'li.leaf div.thought-container div.thought div.editable',
   )
