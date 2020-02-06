@@ -1,10 +1,14 @@
+import React from 'react'
 import Adapter from 'enzyme-adapter-react-16'
 import { configure, mount } from 'enzyme'
 import 'jest-localstorage-mock'
 
+import App from './App.js'
+import { handleKeyboard } from './shortcuts.js'
+
 configure({ adapter: new Adapter() })
 
-window.createTestApp = async (app) => {
+const createTestApp = async (app) => {
   document.getSelection = () => ({
     type: 'None',
   })
@@ -27,21 +31,39 @@ window.createTestApp = async (app) => {
 
   // eslint-disable-next-line no-undef
   jest.useFakeTimers()
-  const wrapper = await mount(app, { attachTo: document.body })
+  const wrapper = await mount(
+    <div
+      id="keyboard"
+      onKeyDown={handleKeyboard}
+      tabIndex="0"
+    >
+      {app}
+    </div>,
+    { attachTo: document.body },
+  )
   const skipTutorial = wrapper.find('div.modal-actions div a')
   skipTutorial.simulate('click')
-  const keyboardResponder = wrapper.find('div#keyboard')
+  const keyboardResponder = wrapper.find('#keyboard')
   await keyboardResponder.simulate('keydown', { key: 'Enter' })
   // eslint-disable-next-line no-undef
   jest.runAllTimers()
   await wrapper.update()
-
-  return wrapper
+  document.wrapper = wrapper
 }
 
-window.cleanupTestApp = () => {
+const cleanupTestApp = () => {
   // eslint-disable-next-line fp/no-delete
   delete document.getSelection
   // eslint-disable-next-line fp/no-delete
   delete window.getSelection
+  // eslint-disable-next-line fp/no-delete
+  delete window.wrapper
 }
+
+beforeAll(async () => {
+  createTestApp(<App />)
+})
+
+afterAll(() => {
+  cleanupTestApp()
+})

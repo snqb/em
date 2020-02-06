@@ -1,5 +1,5 @@
 import { store } from '../store.js'
-import { keyDown, keyUp } from '../shortcuts.js'
+import { keyDown, keyUp, handleKeyboard } from '../shortcuts.js'
 
 // util
 import { decodeThoughtsUrl } from './decodeThoughtsUrl.js'
@@ -11,6 +11,7 @@ export const initEvents = () => {
 
   window.addEventListener('keydown', keyDown)
   window.addEventListener('keyup', keyUp)
+  window.addEventListener('keydown', handleKeyboard)
 
   window.addEventListener('popstate', () => {
 
