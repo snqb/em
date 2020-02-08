@@ -1,8 +1,8 @@
+import { act } from 'react-dom/test-utils'
 import { getThoughtsRanked } from '../../util.js'
 
-it('create and edit subthought', async () => {
-  const thoughts = document.wrapper.find('div.transformContain div ul')
-  const thought = thoughts.find(
+it('delete subthought', async () => {
+  const thought = document.wrapper.find(
     'li.leaf div.thought-container div.thought div.editable',
   )
   expect(thought.text()).toBe('')
@@ -21,12 +21,15 @@ it('create and edit subthought', async () => {
   const subthought = document.wrapper.find(
     'ul.distance-from-cursor-0 li.leaf div.thought-container div.thought div.editable',
   )
-  await subthought.simulate('change', { target: { value: 's' } })
-  await keyboardResponder.simulate('keydown', { key: 'Enter' })
   jest.runAllTimers()
   await subthought.update()
-  expect(subthought.text()).toBe('s')
+  expect(subthought.text()).toBe('')
   subthoughtsData = getThoughtsRanked(['c'])
   subthoughtData = subthoughtsData[0]
-  expect(subthoughtData.value).toBe('s')
+  expect(subthoughtData.value).toBe('')
+  await act(async () => {
+    await subthought.simulate('keydown', { key: 'Backspace' })
+  })
+  subthoughtsData = getThoughtsRanked(['c'])
+  expect(subthoughtsData.length).toBe(0)
 })

@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import Adapter from 'enzyme-adapter-react-16'
 import { configure, mount } from 'enzyme'
 import 'jest-localstorage-mock'
@@ -11,6 +12,7 @@ configure({ adapter: new Adapter() })
 const createTestApp = async (app) => {
   document.getSelection = () => ({
     type: 'None',
+    removeAllRanges: () => {},
   })
 
   document.createRange = () => ({
@@ -29,26 +31,32 @@ const createTestApp = async (app) => {
     addRange: () => {},
   })
 
-  // eslint-disable-next-line no-undef
-  jest.useFakeTimers()
-  const wrapper = await mount(
-    <div
-      id="keyboard"
-      onKeyDown={handleKeyboard}
-      tabIndex="0"
-    >
-      {app}
-    </div>,
-    { attachTo: document.body },
-  )
-  const skipTutorial = wrapper.find('div.modal-actions div a')
-  skipTutorial.simulate('click')
-  const keyboardResponder = wrapper.find('#keyboard')
-  await keyboardResponder.simulate('keydown', { key: 'Enter' })
-  // eslint-disable-next-line no-undef
-  jest.runAllTimers()
-  await wrapper.update()
-  document.wrapper = wrapper
+  window.location = {
+    pathname: '',
+  }
+
+  await act(async () => {
+    // eslint-disable-next-line no-undef
+    jest.useFakeTimers()
+    const wrapper = await mount(
+      <div
+        id="keyboard"
+        onKeyDown={handleKeyboard}
+        tabIndex="0"
+      >
+        {app}
+      </div>,
+      { attachTo: document.body },
+    )
+    const skipTutorial = wrapper.find('div.modal-actions div a')
+    skipTutorial.simulate('click')
+    const keyboardResponder = wrapper.find('#keyboard')
+    await keyboardResponder.simulate('keydown', { key: 'Enter' })
+    // eslint-disable-next-line no-undef
+    jest.runAllTimers()
+    await wrapper.update()
+    document.wrapper = wrapper
+  })
 }
 
 const cleanupTestApp = () => {

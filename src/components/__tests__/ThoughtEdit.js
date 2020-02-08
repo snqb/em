@@ -1,6 +1,5 @@
-it('create and edit empty thought', async () => {
-  const thoughts = document.wrapper.find('div.transformContain div ul.children')
-  const thought = thoughts.find(
+it('edit thought', async () => {
+  const thought = document.wrapper.find(
     'li.leaf div.thought-container div.thought div.editable',
   )
   expect(thought.text()).toBe('')
