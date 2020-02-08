@@ -11,7 +11,6 @@ it('create subthought', async () => {
   jest.runAllTimers()
   await thought.update()
   expect(thought.text()).toBe('c')
-  // eslint-disable-next-line fp/no-let
   const subthoughtsData = getThoughtsRanked(['c'])
   const subthoughtData = subthoughtsData[0]
   expect(subthoughtData.value).toBe('')

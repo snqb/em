@@ -36,7 +36,6 @@ const createTestApp = async (app) => {
   }
 
   await act(async () => {
-    // eslint-disable-next-line no-undef
     jest.useFakeTimers()
     const wrapper = await mount(
       <div
@@ -52,7 +51,6 @@ const createTestApp = async (app) => {
     skipTutorial.simulate('click')
     const keyboardResponder = wrapper.find('#keyboard')
     await keyboardResponder.simulate('keydown', { key: 'Enter' })
-    // eslint-disable-next-line no-undef
     jest.runAllTimers()
     await wrapper.update()
     document.wrapper = wrapper
