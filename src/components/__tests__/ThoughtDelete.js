@@ -1,9 +1,7 @@
 import { act } from 'react-dom/test-utils'
 
 it('delete thought', async () => {
-  const thought = document.wrapper.find(
-    'li.leaf div.thought-container div.thought div.editable',
-  )
+  const thought = document.wrapper.find('div.editable')
   expect(thought.text()).toBe('')
   const keyboardResponder = document.wrapper.find('div#keyboard')
   await thought.simulate('change', { target: { value: 'c' } })
