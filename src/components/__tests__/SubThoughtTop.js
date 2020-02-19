@@ -9,11 +9,7 @@ it('create top subthought', async () => {
   jest.runAllTimers()
   await thought.update()
   expect(thought.text()).toBe('c')
-  // eslint-disable-next-line fp/no-let
-  let subthoughtsData = getThoughtsRanked(['c'])
-  // eslint-disable-next-line fp/no-let
-  let subthoughtData = subthoughtsData[0]
-  expect(subthoughtData.value).toBe('')
+  expect(getThoughtsRanked(['c'])[0].value).toBe('')
   await document.wrapper.update()
   const subthought = document.wrapper.find(
     'ul.distance-from-cursor-0 li.leaf div.thought-container div.thought div.editable',
@@ -22,10 +18,8 @@ it('create top subthought', async () => {
   await keyboardResponder.simulate('keydown', { key: 'Enter' })
   jest.runAllTimers()
   await subthought.update()
+  expect(getThoughtsRanked(['c'])[0].value).toBe('s')
   expect(subthought.text()).toBe('s')
-  subthoughtsData = getThoughtsRanked(['c'])
-  subthoughtData = subthoughtsData[0]
-  expect(subthoughtData.value).toBe('s')
   await keyboardResponder.simulate('keydown', { key: 'Enter', shifKey: true, metaKey: true })
   const subthoughttop = document.wrapper.find(
     'ul.distance-from-cursor-0 li.leaf div.thought-container div.thought div.editable',
