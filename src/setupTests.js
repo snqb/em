@@ -5,11 +5,11 @@ import { configure, mount } from 'enzyme'
 import 'jest-localstorage-mock'
 
 import App from './App.js'
-import { handleKeyboard } from './shortcuts.js'
+import { keyDown } from './shortcuts.js'
 
 configure({ adapter: new Adapter() })
 
-const createTestApp = async (app) => {
+const createTestApp = async app => {
   document.getSelection = () => ({
     type: 'None',
     removeAllRanges: () => {},
@@ -40,7 +40,7 @@ const createTestApp = async (app) => {
     const wrapper = await mount(
       <div
         id="keyboard"
-        onKeyDown={handleKeyboard}
+        onKeyDown={keyDown}
         tabIndex="0"
       >
         {app}
