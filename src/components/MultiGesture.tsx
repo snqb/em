@@ -113,6 +113,8 @@ class MultiGesture extends React.Component<MultiGestureProps> {
       e => {
         if (this.disableScroll && e.cancelable) {
           e.preventDefault()
+          // on iOS preventDefault is enough, while Chrome android still allows unless we stop the propagation
+          e.stopPropagation()
         }
       },
       { passive: false },
